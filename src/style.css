@@ -1,9 +1,11 @@
 :root {
+  box-sizing: border-box;
+  min-height: 100vh;
   font-family: 'Poppins', sans-serif;
+  background-color: #fefefe;
 
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-

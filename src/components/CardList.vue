@@ -1,0 +1,100 @@
+<template>
+  <div
+    @click.prevent="cardClick()"
+    class="p-6 max-w-md lg:w-56 h-56 bg-white rounded-xl border border-gray-200 shadow-xl inline-flex flex-col justify-between"
+    :id="'card-' + props.id"
+  >
+    <h5 class="mb-2 text-xl font-black">
+      {{ props.title }}
+    </h5>
+
+    <div class="flex flex-row justify-between items-center">
+      <p class="text-xs text-gray-700">
+        {{ props.date }}
+      </p>
+
+      <button type="button" @click.prevent="whenDelete()">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 7H20"
+            stroke="#888888"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M10 11V17"
+            stroke="#888888"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M14 11V17"
+            stroke="#888888"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M5 7L6 19C6 19.5304 6.21071 20.0391 6.58579 20.4142C6.96086 20.7893 7.46957 21 8 21H16C16.5304 21 17.0391 20.7893 17.4142 20.4142C17.7893 20.0391 18 19.5304 18 19L19 7"
+            stroke="#888888"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M9 7V4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4V7"
+            stroke="#888888"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <ModalDelete />
+</template>
+
+<script setup>
+import { defineAsyncComponent } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const ModalDelete = defineAsyncComponent(() => import('./modal/Delete.vue'));
+const props = defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
+  date: {
+    type: String,
+    default: '',
+  },
+  id: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const emit = defineEmits(['whenDelete']);
+
+const whenDelete = () => {
+  alert('Apakah yakin untuk delete');
+  emit('whenDelete');
+  return;
+};
+const cardClick = () => {
+  router.push('/detail/' + props.id);
+  return;
+};
+</script>
+
+<style></style>
