@@ -1,6 +1,19 @@
 <script setup>
-import { defineAsyncComponent, reactive } from 'vue';
+import { defineAsyncComponent, onMounted, reactive } from 'vue';
 
+onMounted(async () => {
+  await fetchList();
+});
+
+const fetchList = async () => {
+  const resp = await fetch(
+    'https://todo.api.devcode.gethired.id/activity-groups?email=fikrimuhammad2016%40gmail.com'
+  );
+  const res = await resp.json();
+
+  state.dataList = res.data;
+  return;
+};
 const EmptyState = defineAsyncComponent(() =>
   import('@/components/EmptyList.vue')
 );
@@ -13,16 +26,39 @@ const state = reactive({
   dataList: [],
 });
 
-const addNewList = () => {
-  state.dataList.push({
-    id: 2,
-    title: 'New Activity',
-    date: '14 September 2022',
+const addNewList = async () => {
+  const req = {
+    title: 'New Task',
+    email: 'fikrimuhammad2016@gmail.com',
+  };
+  const resp = await fetch(
+    'https://todo.api.devcode.gethired.id/activity-groups',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(req),
+    }
+  );
+  const res = await resp.json();
+
+  const { id, title, created_at } = res;
+  state.dataList.unshift({
+    id,
+    title,
+    created_at,
   });
 };
 
-const deleteList = () => {
-  state.dataList.pop();
+const deleteList = async (id) => {
+  const resp = await fetch(
+    `https://todo.api.devcode.gethired.id/activity-groups/${id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+  const res = await resp.json();
+
+  state.dataList = state.dataList.filter(val => val.id !== id)
 };
 </script>
 
@@ -70,7 +106,7 @@ const deleteList = () => {
         v-for="data in state.dataList"
         :key="data.id"
         :title="data.title"
-        :date="data.date"
+        :date="data.created_at"
         :id="data.id"
         @when-delete="deleteList(data.id)"
       />

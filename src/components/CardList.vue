@@ -10,7 +10,7 @@
 
     <div class="flex flex-row justify-between items-center">
       <p class="text-xs text-gray-700">
-        {{ props.date }}
+        {{ parsingDate(props.date) }}
       </p>
 
       <button type="button" @click.prevent="whenDelete()">
@@ -85,6 +85,31 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['whenDelete']);
+
+function parsingDate(value) {
+  let _value = value.slice(0, 10).split('-');
+  let monthNumber = parseInt(_value[1]);
+  let monthLiteral = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
+  ][monthNumber - 1];
+
+  _value[1] = monthLiteral;
+
+  _value = _value.reverse().join(' ');
+
+  return _value;
+}
 
 const whenDelete = () => {
   alert('Apakah yakin untuk delete');

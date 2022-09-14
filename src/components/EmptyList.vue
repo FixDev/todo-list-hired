@@ -17,7 +17,7 @@
 
 <script setup>
 const props = defineProps({
-  isDetail: { type: String, default: false },
+  isDetail: { type: Boolean, default: false },
 });
 </script>
 
