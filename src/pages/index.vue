@@ -67,7 +67,9 @@ const deleteList = async (id) => {
 
 <template>
   <header class="flex justify-between items-center">
-    <h1 class="text-3xl font-bold not-italic" data-cy="activity-title">Activity</h1>
+    <h1 class="text-3xl font-bold not-italic" data-cy="activity-title">
+      Activity
+    </h1>
 
     <button
       class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
@@ -107,7 +109,11 @@ const deleteList = async (id) => {
     >
       <div class="loader"></div>
     </div>
-    <EmptyState @click="addNewList" v-else-if="state.dataList.length === 0" />
+    <EmptyState
+      @click="addNewList"
+      v-else-if="state.dataList.length === 0"
+      data-cy="activity-empty-state"
+    />
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       v-else

@@ -1,6 +1,5 @@
 <template>
   <div
-    data-cy="activity-item"
     @click="cardClick()"
     class="p-6 max-w-md lg:w-56 h-56 bg-white rounded-xl border border-gray-200 shadow-xl inline-flex flex-col justify-between"
     :id="'card-' + props.id"
@@ -15,7 +14,7 @@
         {{ parsingDate(props.date) }}
       </p>
 
-      <button type="button" @click.stop="modalDelete.toogleModal()" >
+      <button type="button" @click.stop="modalDelete.toogleModal()">
         <svg
           width="24"
           height="24"

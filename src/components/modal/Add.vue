@@ -49,6 +49,7 @@
                 id="name"
                 placeholder="Tambahkan nama list item"
                 v-model="state.title"
+                data-cy="modal-add-name-input"
               />
             </div>
             <div class="flex flex-col gap-2 mb-2">
@@ -59,6 +60,7 @@
                 id="priority"
                 class="w-52"
                 v-model="state.priority"
+                data-cy="modal-add-priority-dropdown"
               >
                 <option v-for="opt in listOpt" :key="opt" :value="opt.value">
                   {{ opt.label }}
@@ -75,6 +77,7 @@
               :class="{ 'bg-opacity-70': state.title === '' }"
               :disabled="state.title === ''"
               type="submit"
+              data-cy="modal-add-save-button"
             >
               Simpan
             </button>

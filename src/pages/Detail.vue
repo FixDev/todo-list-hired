@@ -376,7 +376,6 @@ const setOption = (option) => {
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
         @click="showModalAdd()"
-        data-cy="activity-add-button"
       >
         <svg
           width="24"
@@ -412,6 +411,7 @@ const setOption = (option) => {
       <div class="loader"></div>
     </div>
     <EmptyList
+      data-cy="todo-empty-state"
       @click="showModalAdd()"
       is-detail
       v-else-if="state.dataDetail?.todo_items?.length === 0"
@@ -443,11 +443,15 @@ const setOption = (option) => {
             <p
               class="text-md text-gray-700"
               :class="{ 'line-through': item.is_active === 0 }"
-              data-cy="activity-title"
+              data-cy="todo-title"
             >
               {{ item.title }}
             </p>
-            <button type="button" @click="showModalAdd(item)">
+            <button
+              type="button"
+              @click="showModalAdd(item)"
+              data-cy="todo-add-button"
+            >
               <svg
                 width="20"
                 height="20"
@@ -476,7 +480,6 @@ const setOption = (option) => {
           <button
             type="button"
             @click.prevent="showModalDelete(item.title, item.id)"
-            data-cy="todo-item-delete-button"
           >
             <svg
               width="24"

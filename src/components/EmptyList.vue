@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="flex items-center justify-center my-44 lg:my-0"
-    data-cy="”activity-empty-state”"
-  >
+  <div class="flex items-center justify-center my-44 lg:my-0">
     <img
       v-if="!props.isDetail"
       src="../assets/img/activity-empty-state.png"
