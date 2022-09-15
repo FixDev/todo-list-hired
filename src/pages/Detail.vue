@@ -257,7 +257,7 @@ const setOption = (option) => {
 </script>
 
 <template>
-  <header class="flex justify-between items-center">
+  <header class="flex flex-wrap justify-between gap-2 items-center">
     <div class="inline-flex items-center gap-2">
       <button type="button" @click="router.push('/')">
         <svg

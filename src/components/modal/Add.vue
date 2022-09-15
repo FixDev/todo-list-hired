@@ -1,7 +1,7 @@
 <template>
   <!-- Main modal -->
   <div
-    v-if="isModalOpen"
+    v-show="isModalOpen"
     class="overflow-y-auto bg-gray-900 bg-opacity-40 overflow-x-hidden flex justify-center items-center fixed z-50 w-full inset-0 h-modal"
     @click.self="toogleModal()"
   >
