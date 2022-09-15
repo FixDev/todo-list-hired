@@ -17,7 +17,7 @@
       <button
         type="button"
         @click.stop="emit('whenDelete')"
-        data-cy="modal-delete-confirm-button"
+        data-cy="activity-item-delete-button"
       >
         <svg
           width="24"

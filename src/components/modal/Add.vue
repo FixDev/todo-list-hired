@@ -101,14 +101,13 @@
                   <ul
                     v-show="state.isOptionsExpanded"
                     class="absolute left-0 right-0 mb-4 mt-2 bg-white divide-y rounded-lg shadow-lg overflow-hidden w-52"
-                    data-cy="sort-selection"
                   >
                     <li
                       v-for="(option, index) in state.options"
                       :key="index"
                       class="px-6 py-4 transition-colors duration-300 hover:bg-gray-200"
                       @mousedown.prevent="setOption(option)"
-                      data-cy="todo-item-title"
+                      data-cy="modal-add-priority-item"
                     >
                       <div class="flex justify-between">
                         <div

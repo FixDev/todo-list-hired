@@ -5,10 +5,13 @@ import CardList from '../components/CardList.vue';
 import EmptyList from '../components/EmptyList.vue';
 import ModalAdd from '../components/modal/Add.vue';
 import ModalDelete from '../components/modal/Delete.vue';
+import AlertDone from '../components/modal/AlertDone.vue';
+
 const router = useRouter();
 const routes = useRoute();
 const modalAdd = ref();
 const modalDelete = ref();
+const alertDone = ref();
 
 const todo_items = computed(() => {
   let items = state.dataDetail?.todo_items;
@@ -250,6 +253,7 @@ const deleteList = async (id) => {
     (val) => val.id !== id
   );
   modalDelete.value.toogleModal();
+  alertDone.value.toogleModal();
 };
 
 const setStatusItem = async (id, is_active) => {
@@ -374,16 +378,15 @@ const setOption = (option) => {
           <ul
             v-show="state.isOptionsExpanded"
             class="absolute left-0 right-0 mb-4 mt-2 bg-white divide-y rounded-lg shadow-lg overflow-hidden w-52"
-            data-cy="sort-selection"
           >
             <li
               v-for="(option, index) in state.options"
               :key="index"
               class="px-6 py-4 transition-colors duration-300 hover:bg-gray-200"
               @mousedown.prevent="setOption(option)"
-              data-cy="todo-item-title"
+              data-cy="sort-selection"
             >
-              <div class="flex justify-between">
+              <div class="flex justify-between" data-cy="todo-item-title">
                 <div>
                   {{ option.label }}
                 </div>
@@ -566,6 +569,9 @@ const setOption = (option) => {
       :message="state.titleForModalDelete"
       @when-submit="deleteList(state.idItem)"
     />
+  </div>
+  <div data-cy="modal-information">
+    <AlertDone ref="alertDone" />
   </div>
 </template>
 
