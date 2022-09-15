@@ -65,13 +65,11 @@
       </button>
     </div>
   </div>
-  <div data-cy="modal-delete">
-    <ModalDelete
-      ref="modalDelete"
-      :message="props.title"
-      @when-submit="whenDelete"
-    />
-  </div>
+  <ModalDelete
+    ref="modalDelete"
+    :message="props.title"
+    @when-submit="whenDelete"
+  />
 </template>
 
 <script setup>
