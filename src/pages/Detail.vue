@@ -254,7 +254,10 @@ const setOption = (option) => {
 </script>
 
 <template>
-  <header class="flex justify-between items-center">
+  <header
+    class="flex justify-between items-center"
+    data-cy="header-detail-page"
+  >
     <div class="inline-flex items-center gap-2">
       <button type="button" @click="router.push('/')">
         <svg
@@ -403,7 +406,7 @@ const setOption = (option) => {
       </button>
     </div>
   </header>
-  <section class="mt-7 lg:mt-13">
+  <section class="mt-7 lg:mt-13" data-cy="body-detail-page">
     <div
       v-if="state.showLoading"
       class="flex justify-center items-center mt-64 lg:mt-40"

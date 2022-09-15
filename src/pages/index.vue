@@ -11,9 +11,9 @@ const fetchList = async () => {
     'https://todo.api.devcode.gethired.id/activity-groups?email=fikrimuhammad2016%40gmail.com'
   );
   const res = await resp.json();
-  
-    state.dataList = res.data;
-    state.showLoading = false;
+
+  state.dataList = res.data;
+  state.showLoading = false;
   return;
 };
 const EmptyState = defineAsyncComponent(() =>
@@ -66,7 +66,7 @@ const deleteList = async (id) => {
 </script>
 
 <template>
-  <header class="flex justify-between items-center">
+  <header class="flex justify-between items-center" data-cy="header-home-page">
     <h1 class="text-3xl font-bold not-italic">Activity</h1>
 
     <button
@@ -99,8 +99,11 @@ const deleteList = async (id) => {
       Tambah
     </button>
   </header>
-  <section class="mt-7 lg:mt-13">
-    <div v-if="state.showLoading" class="flex justify-center items-center mt-64 lg:mt-40">
+  <section class="mt-7 lg:mt-13" data-cy="body-home-page">
+    <div
+      v-if="state.showLoading"
+      class="flex justify-center items-center mt-64 lg:mt-40"
+    >
       <div class="loader"></div>
     </div>
     <EmptyState @click="addNewList" v-else-if="state.dataList.length === 0" />
