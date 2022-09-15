@@ -1,11 +1,5 @@
 <script setup>
-import {
-  computed,
-  defineAsyncComponent,
-  onBeforeMount,
-  reactive,
-  ref,
-} from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import CardList from '../components/CardList.vue';
 import EmptyList from '../components/EmptyList.vue';

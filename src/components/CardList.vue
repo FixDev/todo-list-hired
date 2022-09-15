@@ -73,11 +73,11 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-const router = useRouter();
+import ModalDelete from './modal/Delete.vue';
 
-const ModalDelete = defineAsyncComponent(() => import('./modal/Delete.vue'));
+const router = useRouter();
 const modalDelete = ref();
 const props = defineProps({
   title: {
