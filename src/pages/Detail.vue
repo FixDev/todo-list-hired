@@ -28,7 +28,7 @@ const ModalDelete = defineAsyncComponent(() =>
   import('@/components/modal/Delete.vue')
 );
 
-onBeforeMount(async () => {
+const fetchAllItem = async () => {
   const id = routes.params.id;
   const resp = await fetch(
     `https://todo.api.devcode.gethired.id/activity-groups/${id}`
@@ -37,11 +37,14 @@ onBeforeMount(async () => {
   const res = await resp.json();
 
   state.dataDetail = res;
+};
+
+onBeforeMount(async () => {
+  await fetchAllItem();
 });
 
 const state = reactive({
   dataDetail: {},
-  checkedItems: [],
   titleForModalDelete: '',
   idItem: '',
 });
@@ -65,7 +68,7 @@ const editTitle = async () => {
   const req = {
     title: state.dataDetail.title,
   };
-  const resp = await fetch(
+  await fetch(
     `https://todo.api.devcode.gethired.id/activity-groups/${state.dataDetail.id}`,
     {
       method: 'PATCH',
@@ -119,7 +122,22 @@ const deleteList = async (id) => {
   state.dataDetail.todo_items = state.dataDetail.todo_items.filter(
     (val) => val.id !== id
   );
-  modalDelete.value.toogleModal()
+  modalDelete.value.toogleModal();
+};
+
+const setStatusItem = async (id, is_active) => {
+  const req = {
+    is_active: is_active === 0 ? 1 : 0,
+  };
+  await fetch(`https://todo.api.devcode.gethired.id/todo-items/${id}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(req),
+  });
+
+  await fetchAllItem();
+
+  return;
 };
 </script>
 
@@ -259,8 +277,8 @@ const deleteList = async (id) => {
               :name="'checkbox-' + item.id"
               :id="'checkbox-' + item.id"
               class="w-6 h-6 text-primary rounded focus:ring-primary focus:ring-2"
-              :value="item.id"
-              v-model="state.checkedItems"
+              :checked="item.is_active === 0"
+              @click="setStatusItem(item.id, item.is_active)"
             />
             <div
               class="inline-flex rounded-full h-3 w-3"
@@ -274,7 +292,7 @@ const deleteList = async (id) => {
             ></div>
             <p
               class="text-md text-gray-700"
-              :class="{ 'line-through': state.checkedItems.includes(item.id) }"
+              :class="{ 'line-through': item.is_active === 0 }"
             >
               {{ item.title }}
             </p>
