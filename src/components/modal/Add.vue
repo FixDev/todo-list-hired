@@ -10,7 +10,7 @@
       <div class="relative bg-white rounded-lg shadow">
         <!-- Modal header -->
         <div class="flex justify-between items-start p-4 rounded-t border-b">
-          <h3 class="text-xl font-semibold text-gray-900"  data-cy="title-modal">Tambah List Item</h3>
+          <h1 class="text-xl font-semibold text-gray-900"  data-cy="title-modal">Tambah List Item</h1>
           <button
             type="button"
             @click="toogleModal()"

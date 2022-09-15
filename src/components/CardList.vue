@@ -6,9 +6,9 @@
     :id="'card-' + props.id"
     :name="'card-' + props.id"
   >
-    <h5 class="mb-2 text-xl font-black" data-cy="title-card">
+    <h1 class="mb-2 text-xl font-black" data-cy="title-card">
       {{ props.title }}
-    </h5>
+    </h1>
 
     <div class="flex flex-row justify-between items-center" data-cy="body-card">
       <p class="text-xs text-gray-700" data-cy="date-created-card">
@@ -59,6 +59,7 @@
             stroke-linejoin="round"
           />
         </svg>
+        
       </button>
     </div>
   </div>
