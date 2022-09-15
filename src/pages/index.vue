@@ -1,5 +1,8 @@
 <script setup>
-import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import EmptyState from '../components/EmptyList.vue';
+import CardState from '../components/CardList.vue';
+import AlertDone from '../components/modal/AlertDone.vue';
 
 onMounted(async () => {
   await getActivities();
@@ -19,17 +22,7 @@ const getActivities = async () => {
   state.showLoading = false;
   return;
 };
-const EmptyState = defineAsyncComponent(() =>
-  import('@/components/EmptyList.vue')
-);
 
-const CardState = defineAsyncComponent(() =>
-  import('@/components/CardList.vue')
-);
-
-const AlertDone = defineAsyncComponent(() =>
-  import('@/components/modal/AlertDone.vue')
-);
 const alertDone = ref();
 
 const state = reactive({

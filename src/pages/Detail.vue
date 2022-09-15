@@ -7,26 +7,14 @@ import {
   ref,
 } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import CardList from '../components/CardList.vue';
+import EmptyList from '../components/EmptyList.vue';
+import ModalAdd from '../components/modal/Add.vue';
+import ModalDelete from '../components/modal/Delete.vue';
 const router = useRouter();
 const routes = useRoute();
 const modalAdd = ref();
 const modalDelete = ref();
-
-const EmptyList = defineAsyncComponent(() =>
-  import('@/components/EmptyList.vue')
-);
-
-const CardList = defineAsyncComponent(() =>
-  import('@/components/CardList.vue')
-);
-
-const ModalAdd = defineAsyncComponent(() =>
-  import('@/components/modal/Add.vue')
-);
-
-const ModalDelete = defineAsyncComponent(() =>
-  import('@/components/modal/Delete.vue')
-);
 
 const todo_items = computed(() => {
   let items = state.dataDetail?.todo_items;
