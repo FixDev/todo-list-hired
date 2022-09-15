@@ -28,7 +28,44 @@ const ModalDelete = defineAsyncComponent(() =>
   import('@/components/modal/Delete.vue')
 );
 
+const todo_items = computed(() => {
+  let items = state.dataDetail?.todo_items;
+
+  function compare(a, b, sortedKey, sortedType) {
+    if (sortedType === 'desc') {
+      if (a[sortedKey] < b[sortedKey]) {
+        return -1;
+      }
+      if (a[sortedKey] > b[sortedKey]) {
+        return 1;
+      }
+      return 0;
+    }
+    if (a[sortedKey] > b[sortedKey]) {
+      return -1;
+    }
+    if (a[sortedKey] < b[sortedKey]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  if (state.selectedOption === 'terbaru')
+    items.sort((a, b) => compare(a, b, 'id', 'desc'));
+  if (state.selectedOption === 'terlama')
+    items = items.sort((a, b) => compare(a, b, 'id', 'asc'));
+  if (state.selectedOption === 'a_z')
+    items = items.sort((a, b) => compare(a, b, 'title', 'asc'));
+  if (state.selectedOption === 'z_a')
+    items = items.sort((a, b) => compare(a, b, 'title', 'desc'));
+  if (state.selectedOption === 'belum_selesai')
+    items = items.sort((a, b) => compare(a, b, 'is_active', 'asc'));
+
+  return items;
+});
+
 const fetchAllItem = async () => {
+  state.showLoading = true;
   const id = routes.params.id;
   const resp = await fetch(
     `https://todo.api.devcode.gethired.id/activity-groups/${id}`
@@ -37,6 +74,7 @@ const fetchAllItem = async () => {
   const res = await resp.json();
 
   state.dataDetail = res;
+  state.showLoading = false;
 };
 
 onBeforeMount(async () => {
@@ -50,6 +88,36 @@ const state = reactive({
   titleForEdit: '',
   priorityForEdit: '',
   isEdit: false,
+  showLoading: false,
+  isOptionsExpanded: false,
+  selectedOption: 'terbaru',
+  options: [
+    {
+      label: 'Terbaru',
+      value: 'terbaru',
+      icon: 'terbaru',
+    },
+    {
+      label: 'Terlama',
+      value: 'terlama',
+      icon: 'terlama',
+    },
+    {
+      label: 'A-Z',
+      value: 'a_z',
+      icon: 'A-Z',
+    },
+    {
+      label: 'Z-A',
+      value: 'z_a',
+      icon: 'Z-A',
+    },
+    {
+      label: 'Belum Selesai',
+      value: 'belum_selesai',
+      icon: 'belum-selesai',
+    },
+  ],
 });
 
 const showModalAdd = (value) => {
@@ -178,6 +246,11 @@ const setStatusItem = async (id, is_active) => {
 
   return;
 };
+
+const setOption = (option) => {
+  state.selectedOption = option?.value;
+  state.isOptionsExpanded = false;
+};
 </script>
 
 <template>
@@ -241,28 +314,64 @@ const setStatusItem = async (id, is_active) => {
     </div>
 
     <div class="inline-flex items-center gap-4">
-      <button class="p-3.5 rounded-full border-2 border-gray-300" type="button">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+      <div class="relative text-lg">
+        <button
+          class="p-3.5 rounded-full border-2 border-gray-300"
+          type="button"
+          @click="state.isOptionsExpanded = !state.isOptionsExpanded"
         >
-          <path
-            d="M3 9L7 5M7 5L11 9M7 5V19"
-            stroke="#888888"
-            stroke-width="1.5"
-            stroke-linecap="square"
-          />
-          <path
-            d="M21 15L17 19M17 19L13 15M17 19V5"
-            stroke="#888888"
-            stroke-width="1.5"
-            stroke-linecap="square"
-          />
-        </svg>
-      </button>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 9L7 5M7 5L11 9M7 5V19"
+              stroke="#888888"
+              stroke-width="1.5"
+              stroke-linecap="square"
+            />
+            <path
+              d="M21 15L17 19M17 19L13 15M17 19V5"
+              stroke="#888888"
+              stroke-width="1.5"
+              stroke-linecap="square"
+            />
+          </svg>
+        </button>
+        <transition
+          enter-active-class="transform transition duration-500 ease-custom"
+          enter-class="-translate-y-1/2 scale-y-0 opacity-0"
+          enter-to-class="translate-y-0 scale-y-100 opacity-100"
+          leave-active-class="transform transition duration-300 ease-custom"
+          leave-class="translate-y-0 scale-y-100 opacity-100"
+          leave-to-class="-translate-y-1/2 scale-y-0 opacity-0"
+        >
+          <ul
+            v-show="state.isOptionsExpanded"
+            class="absolute left-0 right-0 mb-4 mt-2 bg-white divide-y rounded-lg shadow-lg overflow-hidden w-52"
+          >
+            <li
+              v-for="(option, index) in state.options"
+              :key="index"
+              class="px-6 py-4 transition-colors duration-300 hover:bg-gray-200"
+              @mousedown.prevent="setOption(option)"
+            >
+              <div class="flex justify-between">
+                <div>
+                  {{ option.label }}
+                </div>
+                <div>
+                  {{ option.value === state.selectedOption ? '&#10003;' : '' }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </transition>
+      </div>
+
       <button
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
@@ -295,17 +404,18 @@ const setStatusItem = async (id, is_active) => {
     </div>
   </header>
   <section class="mt-7 lg:mt-13">
+    <div
+      v-if="state.showLoading"
+      class="flex justify-center items-center mt-64 lg:mt-40"
+    >
+      <div class="loader"></div>
+    </div>
     <EmptyList
       @click="showModalAdd()"
       is-detail
-      v-if="state.dataDetail?.todo_items?.length === 0"
+      v-else-if="state.dataDetail?.todo_items?.length === 0"
     />
-    <div
-      v-else
-      class="py-1"
-      v-for="item in state.dataDetail.todo_items"
-      :key="item.data"
-    >
+    <div v-else class="py-1" v-for="item in todo_items" :key="item.data">
       <div
         class="p-6 w-full h-20 bg-white rounded-xl border border-gray-200 shadow-xl inline-flex flex-col"
       >
@@ -426,3 +536,9 @@ const setStatusItem = async (id, is_active) => {
     @when-submit="deleteList(state.idItem)"
   />
 </template>
+
+<style scoped>
+.ease-custom {
+  transition-timing-function: cubic-bezier(0.61, -0.53, 0.43, 1.43);
+}
+</style>

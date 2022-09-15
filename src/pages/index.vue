@@ -6,12 +6,14 @@ onMounted(async () => {
 });
 
 const fetchList = async () => {
+  state.showLoading = true;
   const resp = await fetch(
     'https://todo.api.devcode.gethired.id/activity-groups?email=fikrimuhammad2016%40gmail.com'
   );
   const res = await resp.json();
-
-  state.dataList = res.data;
+  
+    state.dataList = res.data;
+    state.showLoading = false;
   return;
 };
 const EmptyState = defineAsyncComponent(() =>
@@ -24,6 +26,7 @@ const CardState = defineAsyncComponent(() =>
 
 const state = reactive({
   dataList: [],
+  showLoading: false,
 });
 
 const addNewList = async () => {
@@ -58,7 +61,7 @@ const deleteList = async (id) => {
   );
   const res = await resp.json();
 
-  state.dataList = state.dataList.filter(val => val.id !== id)
+  state.dataList = state.dataList.filter((val) => val.id !== id);
 };
 </script>
 
@@ -97,7 +100,10 @@ const deleteList = async (id) => {
     </button>
   </header>
   <section class="mt-7 lg:mt-13">
-    <EmptyState @click="addNewList" v-if="state.dataList.length === 0" />
+    <div v-if="state.showLoading" class="flex justify-center items-center mt-64 lg:mt-40">
+      <div class="loader"></div>
+    </div>
+    <EmptyState @click="addNewList" v-else-if="state.dataList.length === 0" />
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       v-else
