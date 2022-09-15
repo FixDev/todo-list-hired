@@ -357,6 +357,7 @@ const setOption = (option) => {
           <ul
             v-show="state.isOptionsExpanded"
             class="absolute left-0 right-0 mb-4 mt-2 bg-white divide-y rounded-lg shadow-lg overflow-hidden w-52"
+            data-cy="sort-selection"
           >
             <li
               v-for="(option, index) in state.options"
@@ -382,7 +383,7 @@ const setOption = (option) => {
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
         @click="showModalAdd()"
-        data-cy="modal-add"
+        data-cy="todo-add-button"
       >
         <svg
           width="24"
@@ -454,11 +455,7 @@ const setOption = (option) => {
             >
               {{ item.title }}
             </p>
-            <button
-              type="button"
-              @click="showModalAdd(item)"
-              data-cy="todo-add-button"
-            >
+            <button type="button" @click="showModalAdd(item)">
               <svg
                 width="20"
                 height="20"
@@ -537,18 +534,22 @@ const setOption = (option) => {
       </div>
     </div>
   </section>
-  <ModalAdd
-    ref="modalAdd"
-    @when-submit="createOrEditItem"
-    :title="state.titleForEdit"
-    :priority="state.priorityForEdit"
-    :is-edit="state.isEdit"
-  />
-  <ModalDelete
-    ref="modalDelete"
-    :message="state.titleForModalDelete"
-    @when-submit="deleteList(state.idItem)"
-  />
+  <div data-cy="modal-add">
+    <ModalAdd
+      ref="modalAdd"
+      @when-submit="createOrEditItem"
+      :title="state.titleForEdit"
+      :priority="state.priorityForEdit"
+      :is-edit="state.isEdit"
+    />
+  </div>
+  <div data-cy="modal-delete">
+    <ModalDelete
+      ref="modalDelete"
+      :message="state.titleForModalDelete"
+      @when-submit="deleteList(state.idItem)"
+    />
+  </div>
 </template>
 
 <style scoped>
