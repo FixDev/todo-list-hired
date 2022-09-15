@@ -44,7 +44,7 @@ const todo_items = computed(() => {
   if (state.selectedOption === 'z_a')
     items = items.sort((a, b) => compare(a, b, 'title', 'asc'));
   if (state.selectedOption === 'belum_selesai')
-    items = items.sort((a, b) => compare(a, b, 'is_active', 'desc'));
+    items = items.sort((a, b) => compare(a, b, 'is_active', 'asc'));
 
   return items;
 });
