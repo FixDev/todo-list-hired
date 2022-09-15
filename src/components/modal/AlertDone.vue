@@ -3,7 +3,6 @@
   <div
     v-if="isModalOpen"
     class="overflow-y-auto bg-gray-900 bg-opacity-40 overflow-x-hidden flex justify-center items-center fixed z-50 inset-0 h-modal w-full"
-    data-cy="modal-information"
     @click.self="toogleModal()"
   >
     <div class="relative p-4 w-full max-w-xl h-auto md:h-auto">
@@ -64,6 +63,7 @@ const isModalOpen = ref(false);
 
 const toogleModal = () => {
   isModalOpen.value = !isModalOpen.value;
+  return;
 };
 defineExpose({ toogleModal });
 </script>

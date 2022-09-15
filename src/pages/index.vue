@@ -3,6 +3,9 @@ import { onMounted, reactive, ref } from 'vue';
 import EmptyState from '../components/EmptyList.vue';
 import CardState from '../components/CardList.vue';
 import AlertDone from '../components/modal/AlertDone.vue';
+import ModalDelete from '../components/modal/Delete.vue';
+
+const modalDelete = ref();
 
 onMounted(async () => {
   await getActivities();
@@ -28,6 +31,8 @@ const alertDone = ref();
 const state = reactive({
   dataList: [],
   showLoading: false,
+  idDelete: '',
+  titleDelete: '',
 });
 
 const addNewList = async () => {
@@ -44,15 +49,18 @@ const addNewList = async () => {
   return;
 };
 
-const deleteList = async (id) => {
-  const resp = await fetch(
-    `https://todo.api.devcode.gethired.id/activity-groups/${id}`,
-    {
-      method: 'DELETE',
-    }
-  );
-  const res = await resp.json();
+const showModalDelete = (value) => {
+  state.idDelete = value.id;
+  state.titleDelete = value.title;
+  modalDelete.value.toogleModal();
+  return;
+};
 
+const deleteList = async (id) => {
+  await fetch(`https://todo.api.devcode.gethired.id/activity-groups/${id}`, {
+    method: 'DELETE',
+  });
+  await modalDelete.value.toogleModal();
   state.dataList = state.dataList.filter((val) => val.id !== id);
   alertDone.value.toogleModal();
 };
@@ -116,11 +124,18 @@ const deleteList = async (id) => {
         :title="data.title"
         :date="data.created_at"
         :id="data.id"
-        @when-delete="deleteList(data.id)"
+        @when-delete="showModalDelete(data)"
       />
     </div>
   </section>
 
+  <div data-cy="modal-delete">
+    <ModalDelete
+      ref="modalDelete"
+      :message="state.titleDelete"
+      @when-submit="deleteList(state.idDelete)"
+    />
+  </div>
   <div data-cy="modal-information">
     <AlertDone ref="alertDone" />
   </div>

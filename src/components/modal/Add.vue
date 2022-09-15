@@ -145,6 +145,7 @@ const isModalOpen = ref(false);
 
 const toogleModal = () => {
   isModalOpen.value = !isModalOpen.value;
+  return;
 };
 
 const setState = () => {

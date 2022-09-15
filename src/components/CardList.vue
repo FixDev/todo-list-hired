@@ -16,7 +16,7 @@
 
       <button
         type="button"
-        @click.stop="modalDelete.toogleModal()"
+        @click.stop="emit('whenDelete')"
         data-cy="activity-item-delete-button"
       >
         <svg
@@ -65,20 +65,12 @@
       </button>
     </div>
   </div>
-  <ModalDelete
-    ref="modalDelete"
-    :message="props.title"
-    @when-submit="whenDelete"
-  />
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import ModalDelete from './modal/Delete.vue';
 
 const router = useRouter();
-const modalDelete = ref();
 const props = defineProps({
   title: {
     type: String,
@@ -120,11 +112,6 @@ function parsingDate(value) {
 
   return _value;
 }
-
-const whenDelete = () => {
-  emit('whenDelete');
-  return;
-};
 
 const cardClick = () => {
   router.push('/detail/' + props.id);
