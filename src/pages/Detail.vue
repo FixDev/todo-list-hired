@@ -387,7 +387,7 @@ const setOption = (option) => {
               data-cy="sort-selection"
             >
               <div class="flex justify-between">
-                <div data-cy="todo-item-title">
+                <div>
                   {{ option.label }}
                 </div>
                 <div>
@@ -472,6 +472,7 @@ const setOption = (option) => {
             <p
               class="text-md text-gray-700"
               :class="{ 'line-through': item.is_active === 0 }"
+              data-cy="todo-item-title"
             >
               {{ item.title }}
             </p>
