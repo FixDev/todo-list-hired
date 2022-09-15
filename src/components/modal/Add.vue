@@ -3,14 +3,13 @@
   <div
     v-if="isModalOpen"
     class="overflow-y-auto bg-gray-900 bg-opacity-40 overflow-x-hidden flex justify-center items-center fixed z-50 w-full inset-0 h-modal"
-    data-cy="modal-add-item"
   >
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto"  data-cy="container-modal-add-item">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow">
         <!-- Modal header -->
         <div class="flex justify-between items-start p-4 rounded-t border-b">
-          <h1 class="text-xl font-semibold text-gray-900"  data-cy="title-modal">Tambah List Item</h1>
+          <h1 class="text-xl font-semibold text-gray-900">Tambah List Item</h1>
           <button
             type="button"
             @click="toogleModal()"

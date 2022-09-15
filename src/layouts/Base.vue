@@ -1,7 +1,10 @@
 <script setup></script>
 <template>
   <header class="bg-primary px-6 py-8 lg:px-52 lg:py-9 sticky top-0">
-    <h1 class="text-white font-bold text-2xl not-italic uppercase antialiased">
+    <h1
+      class="text-white font-bold text-2xl not-italic uppercase antialiased"
+      data-cy="header-title"
+    >
       To Do List App
     </h1>
   </header>
@@ -10,6 +13,5 @@
     <router-view></router-view>
   </main>
 </template>
-
 
 <style></style>

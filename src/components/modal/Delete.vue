@@ -3,11 +3,11 @@
   <div
     v-if="isModalOpen"
     class="overflow-y-auto bg-gray-900 bg-opacity-40 overflow-x-hidden flex justify-center items-center fixed z-50 inset-0 h-modal w-full"
-    data-cy="modal-delete"
+    data-cy="modal-delete-confirm-button"
   >
-    <div class="relative p-4 w-full max-w-xl h-auto md:h-auto"  data-cy="container-modal-delete">
+    <div class="relative p-4 w-full max-w-xl h-auto md:h-auto">
       <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow"  data-cy="background-modal-delete">
+      <div class="relative bg-white rounded-lg shadow">
         <!-- Modal body -->
         <form
           autocomplete="off"

@@ -254,10 +254,7 @@ const setOption = (option) => {
 </script>
 
 <template>
-  <header
-    class="flex justify-between items-center"
-    data-cy="header-detail-page"
-  >
+  <header class="flex justify-between items-center">
     <div class="inline-flex items-center gap-2">
       <button type="button" @click="router.push('/')">
         <svg
@@ -379,6 +376,7 @@ const setOption = (option) => {
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
         @click="showModalAdd()"
+        data-cy="activity-add-button"
       >
         <svg
           width="24"
@@ -406,7 +404,7 @@ const setOption = (option) => {
       </button>
     </div>
   </header>
-  <section class="mt-7 lg:mt-13" data-cy="body-detail-page">
+  <section class="mt-7 lg:mt-13">
     <div
       v-if="state.showLoading"
       class="flex justify-center items-center mt-64 lg:mt-40"
@@ -445,6 +443,7 @@ const setOption = (option) => {
             <p
               class="text-md text-gray-700"
               :class="{ 'line-through': item.is_active === 0 }"
+              data-cy="activity-title"
             >
               {{ item.title }}
             </p>
@@ -477,6 +476,7 @@ const setOption = (option) => {
           <button
             type="button"
             @click.prevent="showModalDelete(item.title, item.id)"
+            data-cy="todo-item-delete-button"
           >
             <svg
               width="24"

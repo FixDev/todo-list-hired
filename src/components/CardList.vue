@@ -1,21 +1,21 @@
 <template>
   <div
-    :data-cy="'card-' + props.id"
+    data-cy="activity-item"
     @click="cardClick()"
     class="p-6 max-w-md lg:w-56 h-56 bg-white rounded-xl border border-gray-200 shadow-xl inline-flex flex-col justify-between"
     :id="'card-' + props.id"
     :name="'card-' + props.id"
   >
-    <h1 class="mb-2 text-xl font-black" data-cy="title-card">
+    <h1 class="mb-2 text-xl font-black">
       {{ props.title }}
     </h1>
 
-    <div class="flex flex-row justify-between items-center" data-cy="body-card">
-      <p class="text-xs text-gray-700" data-cy="date-created-card">
+    <div class="flex flex-row justify-between items-center">
+      <p class="text-xs text-gray-700">
         {{ parsingDate(props.date) }}
       </p>
 
-      <button type="button" @click.stop="modalDelete.toogleModal()" data-cy="button-delete-item-card">
+      <button type="button" @click.stop="modalDelete.toogleModal()">
         <svg
           width="24"
           height="24"
@@ -59,7 +59,6 @@
             stroke-linejoin="round"
           />
         </svg>
-        
       </button>
     </div>
   </div>

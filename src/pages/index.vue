@@ -66,13 +66,14 @@ const deleteList = async (id) => {
 </script>
 
 <template>
-  <header class="flex justify-between items-center" data-cy="header-home-page">
-    <h1 class="text-3xl font-bold not-italic">Activity</h1>
+  <header class="flex justify-between items-center">
+    <h1 class="text-3xl font-bold not-italic" data-cy="activity-title">Activity</h1>
 
     <button
       class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
       type="button"
       @click="addNewList"
+      data-cy="activity-add-button"
     >
       <svg
         width="24"
@@ -99,7 +100,7 @@ const deleteList = async (id) => {
       Tambah
     </button>
   </header>
-  <section class="mt-7 lg:mt-13" data-cy="body-home-page">
+  <section class="mt-7 lg:mt-13">
     <div
       v-if="state.showLoading"
       class="flex justify-center items-center mt-64 lg:mt-40"
