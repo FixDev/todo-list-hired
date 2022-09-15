@@ -2,13 +2,16 @@
 import { defineAsyncComponent, onMounted, reactive } from 'vue';
 
 onMounted(async () => {
-  await fetchList();
+  await getActivities();
 });
 
-const fetchList = async () => {
+const getActivities = async () => {
   state.showLoading = true;
   const resp = await fetch(
-    'https://todo.api.devcode.gethired.id/activity-groups?email=fikrimuhammad2016%40gmail.com'
+    'https://todo.api.devcode.gethired.id/activity-groups?email=fikrimuhammad2016%40gmail.com',
+    {
+      method: 'GET',
+    }
   );
   const res = await resp.json();
 
@@ -74,7 +77,7 @@ const deleteList = async (id) => {
     <button
       class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
       type="button"
-      @click="addNewList"
+      @click="addNewList()"
       data-cy="activity-add-button"
     >
       <svg
@@ -110,7 +113,7 @@ const deleteList = async (id) => {
       <div class="loader"></div>
     </div>
     <div data-cy="activity-empty-state" v-else-if="state.dataList.length === 0">
-      <EmptyState @click="addNewList" />
+      <EmptyState @click="addNewList()" />
     </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4"

@@ -4,7 +4,7 @@
     v-if="isModalOpen"
     class="overflow-y-auto bg-gray-900 bg-opacity-40 overflow-x-hidden flex justify-center items-center fixed z-50 inset-0 h-modal w-full"
     @click.self="toogleModal()"
-     >
+  >
     <div class="relative p-4 w-full max-w-xl h-auto md:h-auto">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow">
@@ -44,17 +44,19 @@
             </h1>
           </div>
           <!-- Modal footer -->
-          <div class="flex items-center justify-center p-6 space-x-2 rounded-b">
+          <div class="flex justify-center p-6 gap-4">
             <button
               class="bg-gray-200 text-black font-black py-3 px-12 rounded-full text-md inline-flex"
               type="button"
               @click="toogleModal()"
+              data-cy="modal-delete-cancel-button"
             >
               Back
             </button>
             <button
               class="bg-red-500 text-white font-bold py-3 px-12 rounded-full text-md inline-flex"
               type="submit"
+              data-cy="activity-item-delete-button"
             >
               Hapus
             </button>

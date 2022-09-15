@@ -64,11 +64,14 @@ const todo_items = computed(() => {
   return items;
 });
 
-const fetchAllItem = async () => {
+const getDetail = async () => {
   state.showLoading = true;
   const id = routes.params.id;
   const resp = await fetch(
-    `https://todo.api.devcode.gethired.id/activity-groups/${id}`
+    `https://todo.api.devcode.gethired.id/activity-groups/${id}`,
+    {
+      method: 'GET',
+    }
   );
 
   const res = await resp.json();
@@ -78,7 +81,7 @@ const fetchAllItem = async () => {
 };
 
 onBeforeMount(async () => {
-  await fetchAllItem();
+  await getDetail();
 });
 
 const state = reactive({
@@ -182,7 +185,7 @@ const editItem = async (value) => {
       body: JSON.stringify(req),
     }
   );
-  await fetchAllItem();
+  await getDetail();
   modalAdd.value.toogleModal();
 
   return;
@@ -242,7 +245,7 @@ const setStatusItem = async (id, is_active) => {
     body: JSON.stringify(req),
   });
 
-  await fetchAllItem();
+  await getDetail();
 
   return;
 };
@@ -280,6 +283,7 @@ const setOption = (option) => {
       </button>
       <h1
         class="text-3xl font-bold not-italic"
+        data-cy="todo-title"
         id="detail-title"
         contenteditable="true"
         @blur="editTitle()"
@@ -318,6 +322,7 @@ const setOption = (option) => {
         <button
           class="p-3.5 rounded-full border-2 border-gray-300"
           type="button"
+          data-cy="todo-sort-button"
           @click="state.isOptionsExpanded = !state.isOptionsExpanded"
         >
           <svg
@@ -358,6 +363,7 @@ const setOption = (option) => {
               :key="index"
               class="px-6 py-4 transition-colors duration-300 hover:bg-gray-200"
               @mousedown.prevent="setOption(option)"
+              data-cy="sort-selection"
             >
               <div class="flex justify-between">
                 <div>
@@ -376,6 +382,7 @@ const setOption = (option) => {
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
         @click="showModalAdd()"
+        data-cy="todo-add-button"
       >
         <svg
           width="24"
@@ -423,6 +430,7 @@ const setOption = (option) => {
         <div class="flex flex-row justify-between items-center">
           <div class="inline-flex items-center gap-4">
             <input
+              data-cy="todo-item-checkbox"
               type="checkbox"
               :name="'checkbox-' + item.id"
               :id="'checkbox-' + item.id"
@@ -443,7 +451,6 @@ const setOption = (option) => {
             <p
               class="text-md text-gray-700"
               :class="{ 'line-through': item.is_active === 0 }"
-              data-cy="todo-title"
             >
               {{ item.title }}
             </p>
@@ -480,6 +487,7 @@ const setOption = (option) => {
           <button
             type="button"
             @click.prevent="showModalDelete(item.title, item.id)"
+            data-cy="todo-item-delete-button"
           >
             <svg
               width="24"

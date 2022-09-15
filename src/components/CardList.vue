@@ -17,7 +17,7 @@
       <button
         type="button"
         @click.stop="modalDelete.toogleModal()"
-        data-cy="activity-item-delete-button"
+        data-cy="modal-delete"
       >
         <svg
           width="24"
