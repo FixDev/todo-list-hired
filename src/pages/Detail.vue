@@ -36,15 +36,15 @@ const todo_items = computed(() => {
   }
 
   if (state.selectedOption === 'terbaru')
-    items.sort((a, b) => compare(a, b, 'id', 'desc'));
+    items.sort((a, b) => compare(a, b, 'id', 'asc'));
   if (state.selectedOption === 'terlama')
-    items = items.sort((a, b) => compare(a, b, 'id', 'asc'));
+    items = items.sort((a, b) => compare(a, b, 'id', 'desc'));
   if (state.selectedOption === 'a_z')
-    items = items.sort((a, b) => compare(a, b, 'title', 'asc'));
-  if (state.selectedOption === 'z_a')
     items = items.sort((a, b) => compare(a, b, 'title', 'desc'));
+  if (state.selectedOption === 'z_a')
+    items = items.sort((a, b) => compare(a, b, 'title', 'asc'));
   if (state.selectedOption === 'belum_selesai')
-    items = items.sort((a, b) => compare(a, b, 'is_active', 'asc'));
+    items = items.sort((a, b) => compare(a, b, 'is_active', 'desc'));
 
   return items;
 });
