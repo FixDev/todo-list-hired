@@ -5,16 +5,20 @@
     :id="'card-' + props.id"
     :name="'card-' + props.id"
   >
-    <h1 class="mb-2 text-xl font-black">
+    <h1 class="mb-2 text-xl font-black" data-cy="activity-item-title">
       {{ props.title }}
     </h1>
 
     <div class="flex flex-row justify-between items-center">
-      <p class="text-xs text-gray-700">
+      <p class="text-xs text-gray-700" data-cy="activity-item-date">
         {{ parsingDate(props.date) }}
       </p>
 
-      <button type="button" @click.stop="modalDelete.toogleModal()">
+      <button
+        type="button"
+        @click.stop="modalDelete.toogleModal()"
+        data-cy="activity-item-delete-button"
+      >
         <svg
           width="24"
           height="24"

@@ -3,7 +3,7 @@
   <div
     v-if="isModalOpen"
     class="overflow-y-auto bg-gray-900 bg-opacity-40 overflow-x-hidden flex justify-center items-center fixed z-50 w-full inset-0 h-modal"
-    @click="toogleModal"
+    @click.self="toogleModal()"
   >
     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
       <!-- Modal content -->

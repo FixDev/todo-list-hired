@@ -109,13 +109,12 @@ const deleteList = async (id) => {
     >
       <div class="loader"></div>
     </div>
-    <EmptyState
-      @click="addNewList"
-      v-else-if="state.dataList.length === 0"
-      data-cy="activity-empty-state"
-    />
+    <div data-cy="activity-empty-state" v-else-if="state.dataList.length === 0">
+      <EmptyState @click="addNewList" />
+    </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+      data-cy="activity-item"
       v-else
     >
       <CardState
