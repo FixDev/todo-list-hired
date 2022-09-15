@@ -5,7 +5,7 @@
       class="text-white font-bold text-2xl not-italic uppercase antialiased"
       data-cy="header-title"
     >
-      To Do List App
+    TO DO LIST APP
     </h1>
   </header>
 

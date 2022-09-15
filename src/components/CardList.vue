@@ -15,7 +15,7 @@
         {{ parsingDate(props.date) }}
       </p>
 
-      <button type="button" @click.stop="modalDelete.toogleModal()">
+      <button type="button" @click.stop="modalDelete.toogleModal()" >
         <svg
           width="24"
           height="24"
