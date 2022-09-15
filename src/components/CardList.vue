@@ -18,6 +18,7 @@
         type="button"
         @click.stop="emit('whenDelete')"
         data-cy="activity-item-delete-button"
+        id="delete-button"
       >
         <svg
           width="24"
@@ -62,7 +63,6 @@
             stroke-linejoin="round"
           />
         </svg>
-        &nbsp;
       </button>
     </div>
   </div>
