@@ -17,7 +17,7 @@
       <button
         type="button"
         @click.stop="modalDelete.toogleModal()"
-        data-cy="modal-delete"
+        data-cy="activity-item-delete-button"
       >
         <svg
           width="24"
@@ -65,11 +65,11 @@
       </button>
     </div>
   </div>
-  <ModalDelete
-    ref="modalDelete"
-    :message="props.title"
-    @when-submit="whenDelete"
-  />
+    <ModalDelete
+      ref="modalDelete"
+      :message="props.title"
+      @when-submit="whenDelete"
+    />
 </template>
 
 <script setup>

@@ -363,7 +363,7 @@ const setOption = (option) => {
               :key="index"
               class="px-6 py-4 transition-colors duration-300 hover:bg-gray-200"
               @mousedown.prevent="setOption(option)"
-              data-cy="sort-selection"
+              data-cy="todo-item-title"
             >
               <div class="flex justify-between">
                 <div>
@@ -382,7 +382,7 @@ const setOption = (option) => {
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
         @click="showModalAdd()"
-        data-cy="todo-add-button"
+        data-cy="modal-add"
       >
         <svg
           width="24"

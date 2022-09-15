@@ -1,5 +1,5 @@
 <script setup>
-import { defineAsyncComponent, onMounted, reactive } from 'vue';
+import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
 
 onMounted(async () => {
   await getActivities();
@@ -27,6 +27,11 @@ const CardState = defineAsyncComponent(() =>
   import('@/components/CardList.vue')
 );
 
+const AlertDone = defineAsyncComponent(() =>
+  import('@/components/modal/AlertDone.vue')
+);
+const alertDone = ref();
+
 const state = reactive({
   dataList: [],
   showLoading: false,
@@ -37,22 +42,13 @@ const addNewList = async () => {
     title: 'New Activity',
     email: 'fikrimuhammad2016@gmail.com',
   };
-  const resp = await fetch(
-    'https://todo.api.devcode.gethired.id/activity-groups',
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(req),
-    }
-  );
-  const res = await resp.json();
-
-  const { id, title, created_at } = res;
-  state.dataList.unshift({
-    id,
-    title,
-    created_at,
+  await fetch('https://todo.api.devcode.gethired.id/activity-groups', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(req),
   });
+  await getActivities();
+  return;
 };
 
 const deleteList = async (id) => {
@@ -65,6 +61,7 @@ const deleteList = async (id) => {
   const res = await resp.json();
 
   state.dataList = state.dataList.filter((val) => val.id !== id);
+  alertDone.value.toogleModal();
 };
 </script>
 
@@ -130,4 +127,8 @@ const deleteList = async (id) => {
       />
     </div>
   </section>
+
+  <div data-cy="modal-information">
+    <AlertDone ref="alertDone" />
+  </div>
 </template>
