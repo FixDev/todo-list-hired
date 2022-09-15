@@ -1,9 +1,16 @@
 <script setup>
-import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
+import {
+  computed,
+  defineAsyncComponent,
+  onBeforeMount,
+  reactive,
+  ref,
+} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const router = useRouter();
 const routes = useRoute();
 const modalAdd = ref();
+const modalDelete = ref();
 
 const EmptyList = defineAsyncComponent(() =>
   import('@/components/EmptyList.vue')
@@ -17,7 +24,11 @@ const ModalAdd = defineAsyncComponent(() =>
   import('@/components/modal/Add.vue')
 );
 
-onMounted(async () => {
+const ModalDelete = defineAsyncComponent(() =>
+  import('@/components/modal/Delete.vue')
+);
+
+onBeforeMount(async () => {
   const id = routes.params.id;
   const resp = await fetch(
     `https://todo.api.devcode.gethired.id/activity-groups/${id}`
@@ -26,26 +37,89 @@ onMounted(async () => {
   const res = await resp.json();
 
   state.dataDetail = res;
-
-  console.log(res);
 });
 
 const state = reactive({
-  dataDetail: [],
+  dataDetail: {},
+  checkedItems: [],
+  titleForModalDelete: '',
+  idItem: '',
 });
 
-const showModal = () => {
+const showModalAdd = () => {
   modalAdd.value.toogleModal();
   return;
 };
 
-const editTitle = () => {
+const handleInputTitle = (value) => {
+  state.dataDetail.title = value.target.innerHTML;
+  return;
+};
+
+const focusToTitle = () => {
   document.getElementById('detail-title').focus();
   return;
 };
 
-const deleteItem = (id) => {
+const editTitle = async () => {
+  const req = {
+    title: state.dataDetail.title,
+  };
+  const resp = await fetch(
+    `https://todo.api.devcode.gethired.id/activity-groups/${state.dataDetail.id}`,
+    {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(req),
+    }
+  );
+
   return;
+};
+
+const createItem = async (value) => {
+  const activity_group_id = routes.params.id;
+  const { title, priority } = value;
+  const req = {
+    activity_group_id,
+    title,
+    priority,
+  };
+  const resp = await fetch('https://todo.api.devcode.gethired.id/todo-items', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(req),
+  });
+  const res = await resp.json();
+
+  state.dataDetail.todo_items.push(res);
+  modalAdd.value.toogleModal();
+
+  return;
+};
+
+const showModalDelete = (title, id) => {
+  state.titleForModalDelete = title;
+  state.idItem = id;
+  setTimeout(() => {
+    modalDelete.value.toogleModal();
+  }, 100);
+  return;
+};
+
+const deleteList = async (id) => {
+  const resp = await fetch(
+    `https://todo.api.devcode.gethired.id/todo-items/${id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+  const res = await resp.json();
+
+  state.dataDetail.todo_items = state.dataDetail.todo_items.filter(
+    (val) => val.id !== id
+  );
+  modalDelete.value.toogleModal()
 };
 </script>
 
@@ -78,10 +152,12 @@ const deleteItem = (id) => {
         class="text-3xl font-bold not-italic"
         id="detail-title"
         contenteditable="true"
+        @blur="editTitle()"
+        @input="handleInputTitle"
       >
         {{ state.dataDetail.title }}
       </h1>
-      <button type="button" @click="editTitle()">
+      <button type="button" @click="focusToTitle()">
         <svg
           width="24"
           height="24"
@@ -133,7 +209,7 @@ const deleteItem = (id) => {
       <button
         class="bg-primary text-white font-bold py-3.5 px-7 rounded-full text-lg inline-flex gap-1"
         type="button"
-        @click="showModal()"
+        @click="showModalAdd()"
       >
         <svg
           width="24"
@@ -163,9 +239,9 @@ const deleteItem = (id) => {
   </header>
   <section class="mt-7 lg:mt-13">
     <EmptyList
-      @click="showModal()"
+      @click="showModalAdd()"
       is-detail
-      v-if="state.dataDetail.length === 0"
+      v-if="state.dataDetail?.todo_items?.length === 0"
     />
     <div
       v-else
@@ -180,19 +256,25 @@ const deleteItem = (id) => {
           <div class="inline-flex items-center gap-4">
             <input
               type="checkbox"
-              name="checkbox-1"
-              id="checkbox-1"
+              :name="'checkbox-' + item.id"
+              :id="'checkbox-' + item.id"
               class="w-6 h-6 text-primary rounded focus:ring-primary focus:ring-2"
-              :checked="item.is_active === 1"
-              :value="item.is_active"
+              :value="item.id"
+              v-model="state.checkedItems"
             />
             <div
-              class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"
+              class="inline-flex rounded-full h-3 w-3"
+              :class="{
+                'bg-red-500': item.priority === 'very-high',
+                'bg-orange-500': item.priority === 'high',
+                'bg-cyan-500': item.priority === 'normal',
+                'bg-purple-500': item.priority === 'very-low',
+                'bg-sky-500': item.priority === 'low',
+              }"
             ></div>
             <p
-              :class="`text-md text-gray-700 ${
-                item.is_active === 1 ? 'line-through' : ''
-              }`"
+              class="text-md text-gray-700"
+              :class="{ 'line-through': state.checkedItems.includes(item.id) }"
             >
               {{ item.title }}
             </p>
@@ -222,7 +304,10 @@ const deleteItem = (id) => {
             </button>
           </div>
 
-          <button type="button" @click.prevent="whenDelete()">
+          <button
+            type="button"
+            @click.prevent="showModalDelete(item.title, item.id)"
+          >
             <svg
               width="24"
               height="24"
@@ -271,5 +356,10 @@ const deleteItem = (id) => {
       </div>
     </div>
   </section>
-  <ModalAdd ref="modalAdd" />
+  <ModalAdd ref="modalAdd" @when-submit="createItem" />
+  <ModalDelete
+    ref="modalDelete"
+    :message="state.titleForModalDelete"
+    @when-submit="deleteList(state.idItem)"
+  />
 </template>

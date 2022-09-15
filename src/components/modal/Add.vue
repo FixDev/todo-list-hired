@@ -32,7 +32,11 @@
           </button>
         </div>
         <!-- Modal body -->
-        <form autocomplete="off" @submit="onSubmit">
+        <form
+          autocomplete="off"
+          method="POST"
+          @submit.prevent="emit('whenSubmit', state)"
+        >
           <div class="p-6 space-y-6">
             <div class="flex flex-col gap-2 mb-2">
               <label for="name" class="uppercase">Nama List Item</label>
@@ -41,11 +45,18 @@
                 type="text"
                 id="name"
                 placeholder="Tambahkan nama list item"
+                v-model="state.title"
               />
             </div>
             <div class="flex flex-col gap-2 mb-2">
               <label for="priority" class="uppercase">Priority</label>
-              <select required name="priority" id="priority" class="w-52">
+              <select
+                required
+                name="priority"
+                id="priority"
+                class="w-52"
+                v-model="state.priority"
+              >
                 <option v-for="opt in listOpt" :key="opt" :value="opt.value">
                   {{ opt.label }}
                 </option>
@@ -58,6 +69,8 @@
           >
             <button
               class="bg-primary text-white font-bold py-3 px-7 rounded-full text-md inline-flex"
+              :class="{ 'bg-opacity-70': state.title === '' }"
+              :disabled="state.title === ''"
               type="submit"
             >
               Simpan
@@ -70,35 +83,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
 const listOpt = ref([
   {
     label: 'Very High',
-    title: 'very_high',
+    value: 'very-high',
     color: 'red',
   },
   {
     label: 'High',
-    title: 'high',
+    value: 'high',
     color: 'red',
   },
   {
     label: 'Medium',
-    title: 'medium',
+    value: 'normal',
     color: 'red',
   },
   {
     label: 'Very Low',
-    title: 'very_low',
+    value: 'very-low',
     color: 'red',
   },
   {
     label: 'Low',
-    title: 'low',
+    value: 'low',
     color: 'red',
   },
 ]);
+
+const emit = defineEmits(['whenSubmit']);
+
+const state = reactive({
+  title: '',
+  priority: 'very-high',
+});
 
 const isModalOpen = ref(false);
 
