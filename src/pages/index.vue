@@ -31,7 +31,7 @@ const state = reactive({
 
 const addNewList = async () => {
   const req = {
-    title: 'New Task',
+    title: 'New Activity',
     email: 'fikrimuhammad2016@gmail.com',
   };
   const resp = await fetch(
