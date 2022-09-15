@@ -35,7 +35,9 @@
         <form
           autocomplete="off"
           method="POST"
-          @submit.prevent="emit('whenSubmit', state)"
+          @submit.prevent="
+            emit('whenSubmit', { ...state, isEdit: props.isEdit })
+          "
         >
           <div class="p-6 space-y-6">
             <div class="flex flex-col gap-2 mb-2">
@@ -85,6 +87,21 @@
 <script setup>
 import { ref, reactive } from 'vue';
 
+const props = defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
+  priority: {
+    type: String,
+    default: 'very-high',
+  },
+  isEdit: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const listOpt = ref([
   {
     label: 'Very High',
@@ -125,7 +142,12 @@ const isModalOpen = ref(false);
 const toogleModal = () => {
   isModalOpen.value = !isModalOpen.value;
 };
-defineExpose({ toogleModal });
+
+const setState = () => {
+  state.priority = props.priority;
+  state.title = props.title;
+};
+defineExpose({ toogleModal, setState });
 </script>
 
 <style scoped>

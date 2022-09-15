@@ -47,10 +47,20 @@ const state = reactive({
   dataDetail: {},
   titleForModalDelete: '',
   idItem: '',
+  titleForEdit: '',
+  priorityForEdit: '',
+  isEdit: false,
 });
 
-const showModalAdd = () => {
-  modalAdd.value.toogleModal();
+const showModalAdd = (value) => {
+  state.titleForEdit = value?.title || '';
+  state.priorityForEdit = value?.priority || 'very-high';
+  state.idItem = value?.id || '';
+  state.isEdit = typeof value !== 'undefined' ? true : false;
+  setTimeout(() => {
+    modalAdd.value.setState();
+    modalAdd.value.toogleModal();
+  }, 100);
   return;
 };
 
@@ -80,6 +90,35 @@ const editTitle = async () => {
   return;
 };
 
+const createOrEditItem = (value) => {
+  if (value.isEdit) {
+    editItem(value);
+    return;
+  }
+
+  createItem(value);
+  return;
+};
+
+const editItem = async (value) => {
+  const { title, priority } = value;
+  const req = {
+    title,
+    priority,
+  };
+  await fetch(
+    `https://todo.api.devcode.gethired.id/todo-items/${state.idItem}`,
+    {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(req),
+    }
+  );
+  await fetchAllItem();
+  modalAdd.value.toogleModal();
+
+  return;
+};
 const createItem = async (value) => {
   const activity_group_id = routes.params.id;
   const { title, priority } = value;
@@ -296,7 +335,7 @@ const setStatusItem = async (id, is_active) => {
             >
               {{ item.title }}
             </p>
-            <button type="button">
+            <button type="button" @click="showModalAdd(item)">
               <svg
                 width="20"
                 height="20"
@@ -374,7 +413,13 @@ const setStatusItem = async (id, is_active) => {
       </div>
     </div>
   </section>
-  <ModalAdd ref="modalAdd" @when-submit="createItem" />
+  <ModalAdd
+    ref="modalAdd"
+    @when-submit="createOrEditItem"
+    :title="state.titleForEdit"
+    :priority="state.priorityForEdit"
+    :is-edit="state.isEdit"
+  />
   <ModalDelete
     ref="modalDelete"
     :message="state.titleForModalDelete"
