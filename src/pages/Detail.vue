@@ -71,7 +71,11 @@ const state = reactive({
   titleForModalDelete: '',
   idItem: '',
   titleForEdit: '',
-  priorityForEdit: '',
+  priorityForEdit: {
+    label: 'Very High',
+    value: 'very-high',
+    color: 'red',
+  },
   isEdit: false,
   showLoading: false,
   isOptionsExpanded: false,
@@ -106,8 +110,39 @@ const state = reactive({
 });
 
 const showModalAdd = (value) => {
+  const listPriority = [
+    {
+      label: 'Very High',
+      value: 'very-high',
+      color: 'red',
+    },
+    {
+      label: 'High',
+      value: 'high',
+      color: 'red',
+    },
+    {
+      label: 'Medium',
+      value: 'normal',
+      color: 'red',
+    },
+    {
+      label: 'Very Low',
+      value: 'very-low',
+      color: 'red',
+    },
+    {
+      label: 'Low',
+      value: 'low',
+      color: 'red',
+    },
+  ];
+
+  const priority = listPriority.find(
+    (val) => val.value === value?.priority || 'very-high'
+  );
   state.titleForEdit = value?.title || '';
-  state.priorityForEdit = value?.priority || 'very-high';
+  state.priorityForEdit = priority;
   state.idItem = value?.id || '';
   state.isEdit = typeof value !== 'undefined' ? true : false;
   setTimeout(() => {
@@ -157,7 +192,7 @@ const editItem = async (value) => {
   const { title, priority } = value;
   const req = {
     title,
-    priority,
+    priority: priority.value,
   };
   await fetch(
     `https://todo.api.devcode.gethired.id/todo-items/${state.idItem}`,
@@ -178,7 +213,7 @@ const createItem = async (value) => {
   const req = {
     activity_group_id,
     title,
-    priority,
+    priority: priority.value,
   };
   const resp = await fetch('https://todo.api.devcode.gethired.id/todo-items', {
     method: 'POST',

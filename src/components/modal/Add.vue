@@ -54,18 +54,88 @@
             </div>
             <div class="flex flex-col gap-2 mb-2">
               <label for="priority" class="uppercase">Priority</label>
-              <select
-                required
-                name="priority"
-                id="priority"
-                class="w-52"
-                v-model="state.priority"
-                data-cy="modal-add-priority-dropdown"
-              >
-                <option v-for="opt in listOpt" :key="opt" :value="opt.value">
-                  {{ opt.label }}
-                </option>
-              </select>
+              <div class="relative text-lg">
+                <button
+                  class="flex items-center justify-between px-4 py-3 bg-white w-full border border-gray-400 rounded-md"
+                  @click="state.isOptionsExpanded = !state.isOptionsExpanded"
+                  @blur="state.isOptionsExpanded = false"
+                  type="button"
+                  data-cy="modal-add-priority-dropdown"
+                >
+                  <span class="text-gray-400 inline-flex items-center gap-3">
+                    <div
+                      class="inline-flex rounded-full h-3 w-3"
+                      :class="{
+                        'bg-red-500': state.priority.value === 'very-high',
+                        'bg-orange-500': state.priority.value === 'high',
+                        'bg-cyan-500': state.priority.value === 'normal',
+                        'bg-purple-500': state.priority.value === 'very-low',
+                        'bg-sky-500': state.priority.value === 'low',
+                      }"
+                    ></div>
+                    {{ state.priority.label }}</span
+                  >
+                  <svg
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="h-4 w-4 transform transition-transform duration-200 ease-in-out"
+                    :class="state.isOptionsExpanded ? 'rotate-180' : 'rotate-0'"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <transition
+                  enter-active-class="transform transition duration-500 ease-custom"
+                  enter-class="-translate-y-1/2 scale-y-0 opacity-0"
+                  enter-to-class="translate-y-0 scale-y-100 opacity-100"
+                  leave-active-class="transform transition duration-300 ease-custom"
+                  leave-class="translate-y-0 scale-y-100 opacity-100"
+                  leave-to-class="-translate-y-1/2 scale-y-0 opacity-0"
+                >
+                  <ul
+                    v-show="state.isOptionsExpanded"
+                    class="absolute left-0 right-0 mb-4 mt-2 bg-white divide-y rounded-lg shadow-lg overflow-hidden w-52"
+                    data-cy="sort-selection"
+                  >
+                    <li
+                      v-for="(option, index) in state.options"
+                      :key="index"
+                      class="px-6 py-4 transition-colors duration-300 hover:bg-gray-200"
+                      @mousedown.prevent="setOption(option)"
+                      data-cy="todo-item-title"
+                    >
+                      <div class="flex justify-between">
+                        <div
+                          class="inline-flex rounded-full h-3 w-3"
+                          :class="{
+                            'bg-red-500': option.value === 'very-high',
+                            'bg-orange-500': option.value === 'high',
+                            'bg-cyan-500': option.value === 'normal',
+                            'bg-purple-500': option.value === 'very-low',
+                            'bg-sky-500': option.value === 'low',
+                          }"
+                        ></div>
+                        <div>
+                          {{ option.label }}
+                        </div>
+                        <div>
+                          {{
+                            option.value === state.priority.value
+                              ? '&#10003;'
+                              : ''
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </transition>
+              </div>
             </div>
           </div>
           <!-- Modal footer -->
@@ -97,8 +167,8 @@ const props = defineProps({
     default: '',
   },
   priority: {
-    type: String,
-    default: 'very-high',
+    type: Object,
+    default: { label: 'Very High', value: 'very-high', color: 'red' },
   },
   isEdit: {
     type: Boolean,
@@ -106,39 +176,39 @@ const props = defineProps({
   },
 });
 
-const listOpt = ref([
-  {
-    label: 'Very High',
-    value: 'very-high',
-    color: 'red',
-  },
-  {
-    label: 'High',
-    value: 'high',
-    color: 'red',
-  },
-  {
-    label: 'Medium',
-    value: 'normal',
-    color: 'red',
-  },
-  {
-    label: 'Very Low',
-    value: 'very-low',
-    color: 'red',
-  },
-  {
-    label: 'Low',
-    value: 'low',
-    color: 'red',
-  },
-]);
-
 const emit = defineEmits(['whenSubmit']);
 
 const state = reactive({
   title: '',
-  priority: 'very-high',
+  priority: { label: 'Very High', value: 'very-high', color: 'red' },
+  isOptionsExpanded: false,
+  options: [
+    {
+      label: 'Very High',
+      value: 'very-high',
+      color: 'red',
+    },
+    {
+      label: 'High',
+      value: 'high',
+      color: 'red',
+    },
+    {
+      label: 'Medium',
+      value: 'normal',
+      color: 'red',
+    },
+    {
+      label: 'Very Low',
+      value: 'very-low',
+      color: 'red',
+    },
+    {
+      label: 'Low',
+      value: 'low',
+      color: 'red',
+    },
+  ],
 });
 
 const isModalOpen = ref(false);
@@ -152,6 +222,12 @@ const setState = () => {
   state.priority = props.priority;
   state.title = props.title;
 };
+
+const setOption = (option) => {
+  state.priority = option;
+  state.isOptionsExpanded = false;
+};
+
 defineExpose({ toogleModal, setState });
 </script>
 
@@ -162,21 +238,9 @@ input[type='text'] {
   border-radius: 5px;
 }
 
-input:focus,
-select:focus {
+input:focus {
   outline: none !important;
   border: 2px solid #16abf8;
   box-shadow: 0 0 5px #16abf8;
-}
-
-select {
-  border: 1px solid lightgrey;
-  padding: 10px;
-  border-radius: 5px;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1em;
 }
 </style>

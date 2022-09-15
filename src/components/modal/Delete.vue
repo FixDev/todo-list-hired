@@ -56,7 +56,7 @@
             <button
               class="bg-red-500 text-white font-bold py-3 px-12 rounded-full text-md inline-flex"
               type="submit"
-              data-cy="activity-item-delete-button"
+              data-cy="modal-delete-confirm-button"
             >
               Hapus
             </button>
