@@ -386,8 +386,8 @@ const setOption = (option) => {
               @mousedown.prevent="setOption(option)"
               data-cy="sort-selection"
             >
-              <div class="flex justify-between" data-cy="todo-item-title">
-                <div>
+              <div class="flex justify-between">
+                <div data-cy="todo-item-title">
                   {{ option.label }}
                 </div>
                 <div>
